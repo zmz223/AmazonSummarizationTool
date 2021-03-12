@@ -1,0 +1,5 @@
+#Zach's Requirements
+
+scrapy
+numpy
+pandas
