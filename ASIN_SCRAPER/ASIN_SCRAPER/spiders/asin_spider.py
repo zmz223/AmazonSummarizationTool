@@ -1,7 +1,10 @@
+import os
 import re
 import scrapy
 
 class ASIN_Spider(scrapy.Spider):
+    if os.path.exists("../../asins.txt"):
+        os.remove("../../asins.txt")
     name = "ASIN_Spider"
     start_urls = ['https://www.amazon.com/s?k=water&ref=nb_sb_noss_2']
     def __int__(self, query):
@@ -18,10 +21,11 @@ class ASIN_Spider(scrapy.Spider):
                 ASIN = re.search("[A-Z0-9]+", asin_div)[0]
                 ASIN_dict["item"+str(ind)] = ASIN
             except Exception:
-                with open("../../asins.txt", "w") as f:
+
+                with open("../../asins.txt", "a") as f:
                     for item in ASIN_dict:
                         #print(ASIN_dict[item])
-                        f.write(item+":\t" + ASIN_dict[item]+"\n")
+                        f.write(ASIN_dict[item]+"\n")
                 break
 
         next_page = link
