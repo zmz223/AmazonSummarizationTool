@@ -1,13 +1,16 @@
 import re
 import scrapy
+import psycopg2
 
 class ASIN_Spider(scrapy.Spider):
+
     name = "ASIN_Spider"
-    start_urls = ['https://www.amazon.com/s?k=water&ref=nb_sb_noss_2']
+    start_urls = ['https://www.amazon.com/s?i=electronics&bbn=597566&rh=n%3A172282%2Cn%3A281407%2Cn%3A172532%2Cn%3A172540%2Cn%3A597566%2Cn%3A1288217011&dc&fs=true&qid=1616970663&rnid=597566&ref=sr_nr_n_2']
     def __int__(self, query):
         self.query = query
 
     def parse(self, response):
+        asinList = []
         allASINDivs = response.xpath("/html/body/div[1]/div[2]/div[1]/div[2]/div/span[3]/div[2]")
         pagination = allASINDivs.xpath('//li[@class="a-last"]')
         link = pagination.css('a::attr(href)').get()
@@ -20,7 +23,7 @@ class ASIN_Spider(scrapy.Spider):
             except Exception:
                 with open("../../asins.txt", "w") as f:
                     for item in ASIN_dict:
-                        #print(ASIN_dict[item])
+                        asinList.append(ASIN_dict[item])
                         f.write(item+":\t" + ASIN_dict[item]+"\n")
                 break
 
@@ -28,3 +31,19 @@ class ASIN_Spider(scrapy.Spider):
         if next_page is not None:
             next_page = "https://www.amazon.com/" + link
             yield response.follow(next_page, callback=self.parse)
+
+        con = psycopg2.connect(
+            database="amazonProducts",
+            user="postgres",
+            password="$daxc8pofg!",
+            host="localhost",
+            port=5432
+        )
+
+        cur = con.cursor()
+
+        for i in range(0, len(asinList)):
+            cur.execute("insert into products (asin, department) values (%s, %s)", (asinList[i], "Electronics|Accessories & Supplies|Audio & Video Accessories|Cables & Interconnects|Audio Cables|Fiber Optic Cables"))
+            con.commit()
+
+        cur.close()
