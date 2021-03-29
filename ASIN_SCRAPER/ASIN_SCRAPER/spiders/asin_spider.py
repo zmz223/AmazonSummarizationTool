@@ -1,8 +1,12 @@
+import os
 import re
 import scrapy
 import psycopg2
 
 class ASIN_Spider(scrapy.Spider):
+
+    if os.path.exists("../../asins.txt"):
+        os.remove("../../asins.txt")
 
     name = "ASIN_Spider"
     start_urls = ['https://www.amazon.com/s?i=electronics&bbn=597566&rh=n%3A172282%2Cn%3A281407%2Cn%3A172532%2Cn%3A172540%2Cn%3A597566%2Cn%3A1288217011&dc&fs=true&qid=1616970663&rnid=597566&ref=sr_nr_n_2']
@@ -21,10 +25,15 @@ class ASIN_Spider(scrapy.Spider):
                 ASIN = re.search("[A-Z0-9]+", asin_div)[0]
                 ASIN_dict["item"+str(ind)] = ASIN
             except Exception:
-                with open("../../asins.txt", "w") as f:
+
+                with open("../../asins.txt", "a") as f:
                     for item in ASIN_dict:
+
                         asinList.append(ASIN_dict[item])
                         f.write(item+":\t" + ASIN_dict[item]+"\n")
+
+                        #print(ASIN_dict[item])
+                        f.write(ASIN_dict[item]+"\n")
                 break
 
         next_page = link
