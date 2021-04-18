@@ -3,3 +3,9 @@
 scrapy
 numpy
 pandas
+
+# Samir's Requirements 
+numpy
+matplotlib
+sentence_transformers
+sklearn
