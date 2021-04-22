@@ -22,7 +22,6 @@ def get_data(pageNo, asin):
     alls = []
 
     for d in soup.findAll('div', attrs={'a-section review aok-relative'}):
-        print(d)
         rating = d.find('span', attrs={'class': 'a-link-normal'})
         reviews = d.find('span', attrs={'class': 'a-size-base review-text review-text-content'})
 
