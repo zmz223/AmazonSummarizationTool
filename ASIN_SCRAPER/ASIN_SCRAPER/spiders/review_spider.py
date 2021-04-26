@@ -108,6 +108,7 @@ class ASIN_Spider(scrapy.Spider):
                 temp_row["reviewComment"] = reviewComment
 
                 self.row_list.append(temp_row)
+
             # print(response.meta['ASIN'])
             # print(response.meta['title'])
             # print(response.meta['price'])
