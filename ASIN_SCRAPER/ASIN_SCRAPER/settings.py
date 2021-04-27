@@ -7,7 +7,7 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'ASIN_SCRAPER'
+BOT_NAME = 'reviews'
 
 SPIDER_MODULES = ['ASIN_SCRAPER.spiders']
 NEWSPIDER_MODULE = 'ASIN_SCRAPER.spiders'
@@ -20,7 +20,7 @@ USER_AGENT = 'Mozilla/5.0'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
